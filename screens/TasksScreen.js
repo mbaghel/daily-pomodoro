@@ -1,8 +1,9 @@
 import React from 'react'
 import {
   View,
-  Text,
+  ScrollView,
   Button,
+  StyleSheet,
 } from 'react-native'
 
 import TableHeads from '../components/TableHeads'
@@ -19,14 +20,34 @@ export default class TasksScreen extends React.Component {
   render() {
     const {navigation} = this.props
     return (
-      <View>
-        <TableHeads/>
-        <TaskList/>
-        <Button 
-          onPress={() => navigation.navigate('NewTask')}
-          title="Add new task"
-        />
+      <View style={styles.container}>
+        <ScrollView style={styles.table}>
+          <TableHeads/>
+          <TaskList/>
+          </ScrollView>
+        <View>
+          <Button 
+            onPress={() => navigation.navigate('NewTask')}
+            title="Add new task"
+          />
+          <Button
+            onPress={() => {return null}}
+            title="Review and end day"
+            color="darkred"
+          />
+        </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between"
+  },
+  table: {
+    padding: 10,
+    flex: 1,
+  },
+});

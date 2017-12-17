@@ -1,5 +1,8 @@
 import React from 'react'
-import { View } from 'react-native'
+import { 
+  View,
+  StyleSheet,
+} from 'react-native'
 
 import TimeDisplay from '../components/TimeDisplay'
 import ButtonField from '../components/ButtonField'
@@ -13,8 +16,8 @@ export default class TimerScreen extends React.Component {
   render() {
 
     return (
-      <View>
-        <View>
+      <View style={styles.container}>
+        <View style={styles.top}>
           <TimeDisplay/>
           <ButtonField/>
         </View>
@@ -23,3 +26,14 @@ export default class TimerScreen extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    flex: 1,
+  },
+  top: {
+    flex: 1,
+    justifyContent: "center"
+  }
+});

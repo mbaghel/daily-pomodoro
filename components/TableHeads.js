@@ -6,18 +6,19 @@ import {
 } from 'react-native'
 
 export default TableHeads = () => (
-  <View>
+  <View style={styles.tableHead}>
     <Text>Today's Tasks</Text>
     <Text>Estimate</Text>
     <Text>Assigned</Text>
-    <Text>Done</Text>
-    <View style={styles.line}/>
+    <Text>Done?</Text>
   </View>
 )
 
 const styles = StyleSheet.create({
-  line: {
-    height: 1,
-    backgroundColor: 'blue',
+  tableHead: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 3,
+    borderBottomColor: 'darkslategrey',
   },
 })

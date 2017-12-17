@@ -25,8 +25,8 @@ export default class Checkbox extends React.Component {
 
 styles = StyleSheet.create({
   box: {
-    height: 30,
-    width: 30,
+    height: 20,
+    width: 20,
     borderWidth: 1,
   },
   inner: {

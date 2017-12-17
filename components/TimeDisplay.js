@@ -1,6 +1,10 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { View } from 'react-native'
+
+import { MonoText } from './StyledText'
 
 export default TimeDisplay = () => (
-  <Text>25:00</Text>
+  <View style={{ alignItems: "center" }}>
+    <MonoText style={{ fontSize: 100 }}>25:00</MonoText>
+  </View>
 )

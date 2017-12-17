@@ -6,6 +6,8 @@ import {
   Text,
 } from 'react-native'
 
+import { DefaultText } from '../components/StyledText'
+
 export default class StatsScreen extends React.Component {
   static navigationOptions  = {
     title: "Statistics",
@@ -15,33 +17,62 @@ export default class StatsScreen extends React.Component {
     
     const Table = () => (
       <View>
-        <Text>Pomodoros done</Text>
-        <Text>Target pomodoros</Text>
-        <Text>Tasks completed</Text>
+        <View style={styles.row}>
+          <DefaultText>Pomodoros done</DefaultText>
+          <DefaultText>8</DefaultText>
+        </View>
+        <View style={styles.row}>
+          <DefaultText>Target Pomodoros</DefaultText>
+          <DefaultText>8</DefaultText>
+        </View>
+        <View style={styles.row}>
+          <DefaultText>Tasks Complete</DefaultText>
+          <DefaultText>3</DefaultText>
+        </View>
       </View>
     )
 
     return (
-      <View>
-        <Text style={styles.header}>
-          Total
-        </Text>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headtext}>
+            Total
+          </Text>
+        </View>
         <Table/>
-        <Text style={styles.header}>
-          Average
-        </Text>
+        <View style={styles.header}>
+          <Text style={styles.headtext}>
+            Average
+          </Text>
+        </View>
         <Table/>
-        <Text style={styles.header}>
-          Today
-        </Text>
+        <View style={styles.header}>
+          <Text style={styles.headtext}>
+            Today
+          </Text>
+        </View>
         <Table/>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create ({
+  container: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
   header: {
+    borderBottomWidth: 3,
+    borderBottomColor: "darkslategrey",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  headtext: {
     fontSize: 24,
   }, 
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  }
 });
