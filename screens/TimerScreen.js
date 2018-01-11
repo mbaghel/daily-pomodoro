@@ -4,8 +4,7 @@ import {
   StyleSheet,
 } from 'react-native'
 
-import TimeDisplay from '../components/TimeDisplay'
-import ButtonField from '../components/ButtonField'
+import TimerView from '../containers/TimerView'
 import StatsField from '../components/StatsField'
 
 export default class TimerScreen extends React.Component {
@@ -17,10 +16,7 @@ export default class TimerScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.top}>
-          <TimeDisplay/>
-          <ButtonField/>
-        </View>
+        <TimerView/>
         <StatsField/>
       </View>  
     )
@@ -31,9 +27,5 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     flex: 1,
-  },
-  top: {
-    flex: 1,
-    justifyContent: "center"
   }
 });

@@ -1,3 +1,5 @@
+// Takes props from SettingsView and return text and 
+// slider to display and interact with.
 import React from 'react';
 import { 
   View,

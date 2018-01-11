@@ -1,3 +1,5 @@
+// Connects to redux store, provides each setting
+// with its props, then displays those settings.
 import React from 'react';
 import { 
   ScrollView,

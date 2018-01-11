@@ -9,7 +9,8 @@ import { settings } from "../redux/settingsRedux";
 const middleware = [];
 // Use the NODE_ENV to include logging and debugging tools
 // in development environment. They will be compiled out of
-// the production build.
+// the production build. 
+// https://github.com/gabergg/ReactNativeTodoList
 if (process.env.NODE_ENV === 'development') {
   middleware.push(logger);
 }

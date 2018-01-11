@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import RootNavigation from './navigation/RootNavigation';
 import configureStore from './store/configureStore';
 
-// Call configure store
+// Using react-redux so call configure store (and wrap Provider)
 const store = configureStore();
 
 export default class App extends React.Component {
