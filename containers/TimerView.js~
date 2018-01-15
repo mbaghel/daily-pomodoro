@@ -123,7 +123,7 @@ class TimerView extends React.Component {
     
     // Set state to activeWork or activeBreak and fire callbacks 
     this.setState(
-      (prevState) => {
+      (prevState, endTime, currentTime) => {
         if (prevState.countdownState === 'idle') {
 	  console.log({endTime, currentTime, prevState});
           return {countdownState: 'active', endTime, lastTick: currentTime};

@@ -5,16 +5,24 @@ import {
   StyleSheet,
 } from 'react-native'
 
-const doNothing = () => {return null};
+export default class ButtonField extends React.Component {
 
-export default ButtonField = () => (
-  <View style={styles.field}>
-    <Button 
-      onPress={doNothing}
-      title='Start Pomodoro'
-    />
-  </View>
-)
+  onStartPress() {
+    const { onStart } = this.props
+    onStart();
+  }
+
+  render() {
+    return (
+      <View style={styles.field}>
+      <Button 
+        onPress={this.onStartPress}
+        title='Start Pomodoro'
+      />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   field: {

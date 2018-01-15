@@ -7,16 +7,11 @@ export function changeSetting(item) {
     payload: item,
   }
 }
-// initial settings:
-// pomodoroLength: 25
-// shortbreak: 5
-// longBreak: 15
-// numPomodoros: 4
-// Changed for testing purposes
+
 const initialState = {
-  pomodoroLength : 0.1667,
-  shortBreak : 0.0834,
-  longBreak : 0.1667,
+	pomodoroLength : 0.1667,
+  shortBreak : 5,
+  longBreak : 15,
   numPomodoros: 4,
 };
  
