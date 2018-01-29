@@ -1,15 +1,17 @@
-// TODO: source https://github.com/expo/pomodoroexp
+// TODO: pomodoroCount to Redux, add sound + notification, buttons |source https://github.com/expo/pomodoroexp
 // Connected container - needs settings and pomodoroCount from Redux
 import React from 'react';
 import { 
   View,
   StyleSheet,
-  Button
+  Button,
+  Text
 } from 'react-native';
 import { connect } from 'react-redux';
 
 import TimeDisplay from '../components/TimeDisplay'
 import ButtonField from '../components/ButtonField'
+import { DefaultText } from '../components/StyledText';
 
 const mapStateToProps = (state) => {
   return ({
@@ -74,26 +76,89 @@ class TimerView extends React.Component {
 
   // TODO: Render different buttons depending on state
   renderButtons() {
-    return null;
+    const { countdownState } = this.state;
+
+    if (countdownState === 'idle' || countdownState === 'breakIdle' || countdownState === 'longIdle') {
+      return (
+        <View style={styles.buttons}>
+          <Button
+            onPress={() => {
+              this.startTimer()
+            }}
+            title='Start'
+          />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.buttons}>
+          <Button
+            onPress={() => {
+              this.restartTimer()
+            }}
+            title='Reset'
+          />
+          <Button
+            onPress={() => {
+              this.skipTimer()
+            }}
+            title='End'
+          />
+        </View>
+      );
+    }
   }
 
-  // TODO
+  // Pause timer !Not Working! -- Timer needs to update countdownState on resume or session end
+  /*
   pauseTimer() {
-    return null;
+    this.setState({countdownState: 'paused'}, () => {
+      clearInterval(this.timer);
+      this.timer = null;
+
+    });
   }
+  */
 
   // TODO
-  stopTimer() {
-    return null;
+  restartTimer() {
+    if (this.state.countdownState === 'active') {
+      this.readyTimer();
+    } else {
+      this.readyBreak();
+    }
   }
 
-  // TODO
+  //TODO
+  skipTimer() {
+    if (this.state.countdownState === 'active') {
+      this.pomodoroDidComplete();
+      this.readyBreak();
+    } else {
+      this.readyTimer();
+    }
+  }
+
+  // Reset timer after work session
   readyBreak() {
-    return null;
+    const { settings } = this.props;
+    clearInterval(this.timer);
+
+    this.setState(prevState => {
+      const breakCheck = prevState.pomodoroCount % settings.numPomodoros;
+      if (breakCheck === 0) {
+        return {countdownState: 'longIdle', lastTick: null, endTime: null};
+      } else {
+        return {countdownState: 'breakIdle', lastTick: null, endTime: null};
+      }
+    });
   }
 
-  // TODO
+  // Reset timer after break
   readyTimer() {
+    clearInterval(this.timer);
+
+    this.setState({countdownState: 'idle', lastTick: null, endTime: null});
     return null;
   }
 
@@ -121,11 +186,10 @@ class TimerView extends React.Component {
       endTime = currentTime + settings.longBreak * 60 * 1000;
     }
     
-    // Set state to activeWork or activeBreak and fire callbacks 
+    // Set state to active or breakActive and fire callbacks 
     this.setState(
       (prevState) => {
         if (prevState.countdownState === 'idle') {
-	  console.log({endTime, currentTime, prevState});
           return {countdownState: 'active', endTime, lastTick: currentTime};
         } else {
           return {countdownState: 'breakActive', endTime, lastTick: currentTime};
@@ -148,6 +212,7 @@ class TimerView extends React.Component {
               }
             }, 1000
           ); 
+        // break
         } else {
           this.timer = setInterval(
             () => {
@@ -164,24 +229,85 @@ class TimerView extends React.Component {
     );
   }
 
+  // Render heading dependent on countdownState
+  renderHead() {
+    const { countdownState, pomodoroCount } = this.state;
+
+    if (pomodoroCount === 0 && countdownState === 'idle') {
+      return (
+        <DefaultText>Ready to get started?</DefaultText>
+      );
+    } else if (countdownState === 'active') {
+      return (
+        <DefaultText>Pomodoro active</DefaultText>
+      );
+    /*
+    } else if (countdownState === 'paused') {
+      return (
+        <DefaultText>Paused</DefaultText>
+      );
+    */
+    } else if (countdownState === 'breakIdle') {
+      return (
+        <DefaultText>Pomodoro done! Time to take a break</DefaultText>
+      );
+    } else if (countdownState === 'breakActive') {
+      return (
+        <DefaultText>Enjoy your break</DefaultText>
+      );
+    } else if (countdownState === 'idle') {
+      return (
+        <DefaultText>Break's over. Start another pomodoro</DefaultText>
+      );
+    } else {
+      return (
+        <DefaultText>Pomodoro done! Time for a long break</DefaultText>
+      );
+    }
+  }
+
   render() {
     return (
-      <View style={styles.top}>
-        {this.renderTimeRemaining()}
-        <Button
-          onPress={() => {
-            this.startTimer()
-          }}
-          title='Start Pomodoro'/>
+      <View style={styles.container}>
+        <View style={styles.top}>
+          {this.renderHead()}
+          {this.renderTimeRemaining()}
+          {this.renderButtons()}
+        </View>
+        <View style={styles.bottom}>
+          <Text style={styles.stats}>Active Task: Complete Mockup</Text>
+          <Text style={styles.stats}>Pomodoros Finished Today: {this.state.pomodoroCount}</Text>
+          <Text style={styles.stats}>Tasks Completed Today: 1</Text>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    flex: 1,
+  },
   top: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  bottom: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  stats: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "flex-start",
+    alignSelf: "stretch"
   }
 });
 
