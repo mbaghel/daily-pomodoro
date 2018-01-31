@@ -10,12 +10,13 @@ import {
 import { connect } from 'react-redux';
 
 import TimeDisplay from '../components/TimeDisplay'
-import ButtonField from '../components/ButtonField'
 import { DefaultText } from '../components/StyledText';
+import { dailyActions } from "../redux/dailyStatsRedux"
 
 const mapStateToProps = (state) => {
   return ({
     settings : state.settings,
+    pomodoroCount : state.dailyStats.pomodoroCount
   });
 }
 
@@ -23,16 +24,13 @@ class TimerView extends React.Component {
   state = {
     countdownState: 'idle',
     lastTick: null,
-    endTime: null,
-    // TODO: store and get pomodoroCount from Redux
-    pomodoroCount: 0
+    endTime: null
   };
 
-  // Temp method to update pomodoroCount
+  // increment pomodoroCount
   pomodoroDidComplete() {
-    this.setState(prevState => {
-      return {pomodoroCount: prevState.pomodoroCount + 1};
-    });
+    const {dispatch} = this.props;
+    dispatch(dailyActions.addPomodoro());
   }
 
   // Method to render Time Display in different states
@@ -130,9 +128,9 @@ class TimerView extends React.Component {
   }
 
   //TODO
-  skipTimer() {
+  async skipTimer() {
     if (this.state.countdownState === 'active') {
-      this.pomodoroDidComplete();
+      await this.pomodoroDidComplete();
       this.readyBreak();
     } else {
       this.readyTimer();
@@ -141,11 +139,11 @@ class TimerView extends React.Component {
 
   // Reset timer after work session
   readyBreak() {
-    const { settings } = this.props;
+    const { settings, pomodoroCount } = this.props;
     clearInterval(this.timer);
 
     this.setState(prevState => {
-      const breakCheck = prevState.pomodoroCount % settings.numPomodoros;
+      const breakCheck = pomodoroCount % settings.numPomodoros;
       if (breakCheck === 0) {
         return {countdownState: 'longIdle', lastTick: null, endTime: null};
       } else {
@@ -202,10 +200,10 @@ class TimerView extends React.Component {
         // work session
         if (this.state.countdownState === 'active') {
           this.timer = setInterval(
-            () => {
+            async () => {
               let lastTick = new Date().getTime();
               if (lastTick > endTime) {
-                this.pomodoroDidComplete();
+                await this.pomodoroDidComplete();
                 this.readyBreak();
               } else {
                 this.setState({ lastTick });
@@ -231,7 +229,8 @@ class TimerView extends React.Component {
 
   // Render heading dependent on countdownState
   renderHead() {
-    const { countdownState, pomodoroCount } = this.state;
+    const { countdownState } = this.state;
+    const { pomodoroCount } = this.props;
 
     if (pomodoroCount === 0 && countdownState === 'idle') {
       return (
@@ -276,7 +275,7 @@ class TimerView extends React.Component {
         </View>
         <View style={styles.bottom}>
           <Text style={styles.stats}>Active Task: Complete Mockup</Text>
-          <Text style={styles.stats}>Pomodoros Finished Today: {this.state.pomodoroCount}</Text>
+          <Text style={styles.stats}>Pomodoros Finished Today: {this.props.pomodoroCount}</Text>
           <Text style={styles.stats}>Tasks Completed Today: 1</Text>
         </View>
       </View>

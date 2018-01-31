@@ -5,6 +5,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
 
 import { settings } from "../redux/settingsRedux";
+import { dailyStats } from "../redux/dailyStatsRedux"
 
 const middleware = [];
 // Use the NODE_ENV to include logging and debugging tools
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const reducer = combineReducers({
   settings,
+  dailyStats
 });
 
 // Can use a preloaded initialState if available, in this case we don't
